@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik:500');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --fundo-pagina: #F1F8FF ;
+    --titulo-tarefas: #3B4A68;
+    --borda-botao-tarefas : #6B8E9D ;
+    --fundo-botao-tarefas: #6B8E9D; ;
+    --titulo-botao-tarefas: #FFFFFF;
+  }
+
+*{
+    padding: 0px;
+    margin: 0px;
+    background-color: var(--fundo-pagina);
+}
+
+.header_tarefa{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 2rem auto;
+    width: 40rem;
+    height: 10rem;
+}
+
+.header_tarefa_titulo{
+    font-family: "Raleway", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    align-self: center;
+    text-transform: uppercase;
+    color: var(--titulo-tarefas) ;
+}
+
+.header_tarefa_botao{
+    font-family: "Raleway", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    padding: 16px 42px;
+    border-radius: 3px;
+    border: 1px solid var(--borda-botao-tarefas);
+    box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.5);
+    background: var(--fundo-botao-tarefas) ;
+    text-decoration: none;
+    user-select: none;
+    color: var(--titulo-botao-tarefas);
+    font-size: 16px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    position: relative;
+    transition: .3s ease;
+    overflow: hidden;
+}
+
+.header_tarefa_botao:hover{
+    background: #506f7c;;
+}
