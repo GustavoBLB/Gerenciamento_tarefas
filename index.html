@@ -9,18 +9,73 @@
     <script src='main.js'></script>
 </head>
 <body>
-    
-        <div class="header_tarefa">
 
-            <h1 class="header_tarefa_titulo">Lista de tarefas</h1>
-            
-            <button class="header_tarefa_botao">Adicionar tarefa</button>
+        <header class="tarefa">
 
-            <!-- criar form pra criar tarefa -->
+            <h1 class="tarefa_titulo">Lista de tarefas</h1>
+
+            <button class="tarefa_botao">Adicionar tarefa</button>
+
+            <div class="tarefa_form hidden">
+
+                <h2 class="tarefa_form_titulo">criando tarefa</h2>
+
+                <textarea required rows="3" class="tarefa_form_textarea" placeholder="Digite o nome da tarefa..."></textarea>
+
+                <div class="tarefa_form_botoes">
+
+                    <button class="tarefa_form_botoes_acao cancelar">
+                        Cancelar
+                    </button>
+                    <button class="tarefa_form_botoes_acao criar">
+                        Criar
+                    </button>
+
+                </div>
+
+            </div>
 
             <hr>
 
-        </div>
+        </header>
+
+        <section class="lista_tarefas">
+            
+            <div class="lista_tarefas_item">
+
+                <input class="lista_tarefas_item_checkbox" type="checkbox">
+
+                <h1 class="lista_tarefas_item_texto">Nome da tarefa</h1>
+                
+                <div class="lista_tarefas_item_botoes">
+                    <button class="lista_tarefas_item_botao adicionar">
+                        <img class="lista_tarefas_item_imagem" src="/src/marca-de-verificacao.png">
+                    </button>
+                    <button class="lista_tarefas_item_botao excluir">
+                        <img class="lista_tarefas_item_imagem" src="/src/trash.png">
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="lista_tarefas_item">
+
+                <input class="lista_tarefas_item_checkbox" type="checkbox">
+
+                <h1 class="lista_tarefas_item_texto">Nome da tarefa</h1>
+                
+                <div class="lista_tarefas_item_botoes">
+                    <button class="lista_tarefas_item_botao adicionar">
+                        <img class="lista_tarefas_item_imagem" src="/src/marca-de-verificacao.png">
+                    </button>
+                    <button class="lista_tarefas_item_botao excluir">
+                        <img class="lista_tarefas_item_imagem" src="/src/trash.png">
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
 
 </body>
 </html>
