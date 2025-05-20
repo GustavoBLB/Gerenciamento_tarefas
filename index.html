@@ -6,7 +6,7 @@
     <title>Gerenciamento de tarefas</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
-    <script src='main.js'></script>
+    <script src='main.js' defer></script>
 </head>
 <body>
 
@@ -14,7 +14,7 @@
 
             <h1 class="tarefa_titulo">Lista de tarefas</h1>
 
-            <button class="tarefa_botao">Adicionar tarefa</button>
+            <button class="tarefa_botao" onclick="aparecerCadastro()" >Adicionar tarefa</button>
 
             <div class="tarefa_form hidden">
 
@@ -24,10 +24,7 @@
 
                 <div class="tarefa_form_botoes">
 
-                    <button class="tarefa_form_botoes_acao cancelar">
-                        Cancelar
-                    </button>
-                    <button class="tarefa_form_botoes_acao criar">
+                    <button onclick="cadastrarTarefa()" class="tarefa_form_botoes_acao criar">
                         Criar
                     </button>
 
@@ -39,43 +36,7 @@
 
         </header>
 
-        <section class="lista_tarefas">
-            
-            <div class="lista_tarefas_item">
-
-                <input class="lista_tarefas_item_checkbox" type="checkbox">
-
-                <h1 class="lista_tarefas_item_texto">Nome da tarefa</h1>
-                
-                <div class="lista_tarefas_item_botoes">
-                    <button class="lista_tarefas_item_botao adicionar">
-                        <img class="lista_tarefas_item_imagem" src="/src/marca-de-verificacao.png">
-                    </button>
-                    <button class="lista_tarefas_item_botao excluir">
-                        <img class="lista_tarefas_item_imagem" src="/src/trash.png">
-                    </button>
-                </div>
-
-            </div>
-
-            <div class="lista_tarefas_item">
-
-                <input class="lista_tarefas_item_checkbox" type="checkbox">
-
-                <h1 class="lista_tarefas_item_texto">Nome da tarefa</h1>
-                
-                <div class="lista_tarefas_item_botoes">
-                    <button class="lista_tarefas_item_botao adicionar">
-                        <img class="lista_tarefas_item_imagem" src="/src/marca-de-verificacao.png">
-                    </button>
-                    <button class="lista_tarefas_item_botao excluir">
-                        <img class="lista_tarefas_item_imagem" src="/src/trash.png">
-                    </button>
-                </div>
-
-            </div>
-
-        </section>
+        <section class="lista_tarefas"></section>
 
 </body>
 </html>
