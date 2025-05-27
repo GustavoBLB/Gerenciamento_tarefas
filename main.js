@@ -26,17 +26,17 @@ function atualizarTela(){
     listaTarefas.innerHTML = "";
 
     tarefas.forEach(tarefa => {
-        const cardTarefa = `<div class="lista_tarefas_item">
+        const cardTarefa = `<div class="lista_tarefas_item" data-id="${tarefa.id_tarefa}">
 
                 <input class="lista_tarefas_item_checkbox" type="checkbox">
 
                 <h1 class="lista_tarefas_item_texto">${tarefa.nome}</h1>
                 
                 <div class="lista_tarefas_item_botoes">
-                    <button class="lista_tarefas_item_botao adicionar">
+                    <button class="lista_tarefas_item_botao concluir">
                         <img class="lista_tarefas_item_imagem" src="/src/marca-de-verificacao.png">
                     </button>
-                    <button onclick="excluirTarefa()" class="lista_tarefas_item_botao excluir">
+                    <button onclick="excluirTarefa('${tarefa.id_tarefa}')" class="lista_tarefas_item_botao excluir">
                         <img class="lista_tarefas_item_imagem" src="/src/trash.png">
                     </button>
                 </div>
@@ -57,13 +57,25 @@ function cadastrarTarefa(){
         return;
     }
     const tarefa = {
-        nome: nomeTarefa
+        nome: nomeTarefa,
+        id_tarefa: crypto.randomUUID()
     }
+    console.log(tarefa.id_tarefa)
     tarefas.push(tarefa)
     atualizarTarefas()
     atualizarTela(tarefa)
     textareaTarefa.value = "";
     aparecerCadastro()
+
+}
+
+function excluirTarefa(tarefaExcluida){
+
+    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaExcluida);
+    alert(`Tarefa excluída com sucesso`);
+    tarefas.splice(indice , 1)
+    atualizarTarefas()
+    atualizarTela()
 
 }
 
