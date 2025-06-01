@@ -177,5 +177,38 @@ hr{
     max-width: 30px;
 }
 
+/* MODAL */
+
+.modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+}
+/* 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+} */
+
+.modal_botoes{
+    display: flex;
+    justify-content: space-evenly;
+}
 
 
