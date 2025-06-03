@@ -119,10 +119,7 @@ body{
     cursor: pointer;
     transition: 0.3s ease;
 }
-.cancelar:hover{
-    background-color: #777777;
-    /* background-color: #fdabab; */
-}
+
 .criar:hover{
     background-color: #8b8b8b;
     /* background-color: #c2fcb7; */
@@ -188,27 +185,63 @@ hr{
     align-items: center;
     justify-content: center;
     z-index: 10;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.416);
     width: 100vw;
     height: 100vh;
 }
-/* 
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; 
-} */
+
+.modal_conteudo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    /* gap: 30px; */
+    padding: 2rem;
+    background-color: white;
+    border-radius: 5px;
+    width: 350px;
+    height: 200px;
+}
+
+.modal_conteudo_titulo{
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+}
 
 .modal_botoes{
+    width: 100%;
     display: flex;
     justify-content: space-evenly;
 }
 
+.modal_botoes_botao{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 7.2rem;
+    font-family: "Raleway", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 1rem 1.2rem;
+    border-radius: 3px;
+    box-shadow: 0px 0px 22px -2px rgba(0,0,0,0.5);
+    background: var(--fundo-botao-tarefas) ;
+    color: var(--titulo-botao-tarefas);
+    transition: 0.2s;
+    cursor: pointer;
+}
 
+.modal_botoes_botao_imagem{
+    width: 1.5rem;
+    height: 1.5rem;
+    object-fit: contain;
+}
+
+.modal_botoes_botao:hover{
+    background: #313131;;
+    transform: scale(1.01);
+}
