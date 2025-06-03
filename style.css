@@ -225,15 +225,34 @@ hr{
     font-family: "Raleway", sans-serif;
     font-style: normal;
     font-weight: 500;
+    font-size: 1rem;
     text-transform: uppercase;
     padding: 1rem 1.2rem;
     border-radius: 3px;
-    box-shadow: 0px 0px 22px -2px rgba(0,0,0,0.5);
-    background: var(--fundo-botao-tarefas) ;
+    /* box-shadow: 0px 0px 22px -2px rgba(0,0,0,0.5);
+    background: var(--fundo-botao-tarefas) ; */
     color: var(--titulo-botao-tarefas);
     transition: 0.2s;
     cursor: pointer;
 }
+.confirmar{
+    box-shadow: 0px 0px 22px -2px #00a168(50, 248, 0, 0.5);
+    background: #00a168 ;
+}
+.confirmar:hover{
+    background: #00774d;;
+    transform: scale(1.02);
+    box-shadow: 0px 5px 50px -2px #00a168(50, 248, 0, 0.5);
+}
+.cancelar{
+    box-shadow: 0px 0px 22px -2px rgba(0,0,0,0.5);
+    background: var(--fundo-botao-tarefas) ;
+}
+.cancelar:hover{
+    box-shadow: 0px 0px 22px -2px rgba(0,0,0,0.5);
+    background: #313131;
+}
+
 
 .modal_botoes_botao_imagem{
     width: 1.5rem;
@@ -241,7 +260,3 @@ hr{
     object-fit: contain;
 }
 
-.modal_botoes_botao:hover{
-    background: #313131;;
-    transform: scale(1.01);
-}

@@ -3,7 +3,10 @@ const divForm = document.querySelector(".tarefa_form")
 const botaoTarefa = document.querySelector(".tarefa_botao")
 const textareaTarefa = document.querySelector(".tarefa_form_textarea")
 const listaTarefas = document.querySelector(".lista_tarefas")
+const modal = document.querySelector(".modal")
+const modalTitulo = document.querySelector(".modal_conteudo_titulo")
 
+let tarefaExcluir = null;
 let tarefas = JSON.parse(localStorage.getItem('tarefas')) || []
 
 function aparecerCadastro(){
@@ -97,22 +100,33 @@ function atualizarTela(){
 }
 
 function abrirModalExclusao(tarefa){
+
+    modalTitulo.innerHTML = `Você deseja excluir a tarefa ${tarefa.nome} ?`
+    modal.classList.toggle('hidden')
+    tarefaExcluir = tarefa;
     
+    console.log(tarefa)
+    console.log(tarefaExcluir)
 }
 
-function excluirTarefa(tarefaExcluida){
+function fecharModalExclusao(){
+    modal.classList.toggle('hidden')
+}
 
-    console.log('teste')
-    console.log('teste' + tarefaExcluida.nome)
+function excluirTarefa(){
 
-    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaExcluida.id_tarefa);
+    if(!tarefaExcluir)
+        return;
+
+    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaExcluir.id_tarefa);
     alert(`Tarefa excluída com sucesso`);
     tarefas.splice(indice , 1)
     atualizarTarefas()
 
-    const divExcluir = document.querySelector(`[data-id="${tarefaExcluida.id_tarefa}"]`);
+    const divExcluir = document.querySelector(`[data-id="${tarefaExcluir.id_tarefa}"]`);
     divExcluir.remove();
-
+    console.log('teste')
+    modal.classList.toggle('hidden')
 
 }
 
