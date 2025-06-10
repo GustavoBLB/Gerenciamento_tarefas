@@ -3,7 +3,7 @@ const divForm = document.querySelector(".tarefa_form")
 const botaoTarefa = document.querySelector(".tarefa_botao")
 const textareaTarefa = document.querySelector(".tarefa_form_textarea")
 const listaTarefas = document.querySelector(".lista_tarefas")
-const modal = document.querySelector(".modal")
+const modalBootstrap = new bootstrap.Modal(document.getElementById('modalExcluir'));
 const modalTitulo = document.querySelector(".modal_conteudo_titulo")
 
 let tarefaExcluir = null;
@@ -83,7 +83,6 @@ function cadastrarTarefa(){
     tarefas.push(tarefa)
     atualizarTarefas()
     const tarefaNova = criarCardTarefa(tarefa) 
-    // console.log(tarefaNova)
     listaTarefas.append(tarefaNova)
     textareaTarefa.value = "";
     aparecerCadastro()
@@ -101,16 +100,13 @@ function atualizarTela(){
 
 function abrirModalExclusao(tarefa){
 
-    modalTitulo.innerHTML = `Você deseja excluir a tarefa ${tarefa.nome} ?`
-    modal.classList.toggle('hidden')
+    document.getElementById('modalTitulo').textContent = `Você deseja excluir a tarefa ${tarefa.nome}?`;
     tarefaExcluir = tarefa;
-    
-    console.log(tarefa)
-    console.log(tarefaExcluir)
+    modalBootstrap.show();
 }
 
 function fecharModalExclusao(){
-    modal.classList.toggle('hidden')
+    modalBootstrap.hide();
 }
 
 function excluirTarefa(){
@@ -126,7 +122,7 @@ function excluirTarefa(){
     const divExcluir = document.querySelector(`[data-id="${tarefaExcluir.id_tarefa}"]`);
     divExcluir.remove();
     console.log('teste')
-    modal.classList.toggle('hidden')
+    modalBootstrap.hide();
 
 }
 
