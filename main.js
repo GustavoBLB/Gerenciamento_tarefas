@@ -4,6 +4,7 @@ const botaoTarefa = document.querySelector(".tarefa_botao")
 const textareaTarefa = document.querySelector(".tarefa_form_textarea")
 const listaTarefas = document.querySelector(".lista_tarefas")
 const modalBootstrap = new bootstrap.Modal(document.getElementById('modalExcluir'));
+const modalConfirmandoBootstrap = new bootstrap.Modal(document.getElementById('modalConfirmar'));
 const modalTitulo = document.querySelector(".modal_conteudo_titulo")
 
 let tarefaExcluir = null;
@@ -46,7 +47,7 @@ function criarCardTarefa(tarefa) {
   btnConcluir.classList.add('lista_tarefas_item_botao', 'concluir');
   const imgCheck = document.createElement('img');
   imgCheck.classList.add('lista_tarefas_item_imagem');
-  imgCheck.src = '/src/marca-de-verificacao.png';
+  imgCheck.src = '/src/teste-check2.svg';
   btnConcluir.appendChild(imgCheck);
   botoesDiv.appendChild(btnConcluir);
 
@@ -54,7 +55,7 @@ function criarCardTarefa(tarefa) {
   btnExcluir.classList.add('lista_tarefas_item_botao', 'excluir');
   const imgTrash = document.createElement('img');
   imgTrash.classList.add('lista_tarefas_item_imagem');
-  imgTrash.src = '/src/trash.png';
+  imgTrash.src = '/src/teste_lixo.svg';
   btnExcluir.appendChild(imgTrash);
 
   btnExcluir.addEventListener('click', () => abrirModalExclusao(tarefa));
@@ -105,8 +106,10 @@ function abrirModalExclusao(tarefa){
     modalBootstrap.show();
 }
 
-function fecharModalExclusao(){
-    modalBootstrap.hide();
+function fecharModal(verificacao){
+    // console.log('entrou')
+    // console.log(verificacao)
+    verificacao === 1 ? modalBootstrap.hide() : modalConfirmandoBootstrap.hide()
 }
 
 function excluirTarefa(){
@@ -115,14 +118,14 @@ function excluirTarefa(){
         return;
 
     const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaExcluir.id_tarefa);
-    alert(`Tarefa excluída com sucesso`);
+    // alert(`Tarefa excluída com sucesso`);
     tarefas.splice(indice , 1)
     atualizarTarefas()
 
     const divExcluir = document.querySelector(`[data-id="${tarefaExcluir.id_tarefa}"]`);
     divExcluir.remove();
-    console.log('teste')
     modalBootstrap.hide();
+    modalConfirmandoBootstrap.show()
 
 }
 

@@ -160,6 +160,7 @@ hr{
     font-size: 16px;
     text-transform: uppercase; 
     letter-spacing: 0.1rem;
+    margin-bottom: 0;
 }
 .lista_tarefas_item_botoes{
     display: flex;
