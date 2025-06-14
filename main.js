@@ -2,13 +2,22 @@
 const divForm = document.querySelector(".tarefa_form")
 const botaoTarefa = document.querySelector(".tarefa_botao")
 const textareaTarefa = document.querySelector(".tarefa_form_textarea")
-const listaTarefas = document.querySelector(".lista_tarefas")
-const modalBootstrap = new bootstrap.Modal(document.getElementById('modalExcluir'));
-const modalConfirmandoBootstrap = new bootstrap.Modal(document.getElementById('modalConfirmar'));
-const modalTitulo = document.querySelector(".modal_conteudo_titulo")
 
-let tarefaExcluir = null;
+const listaTarefasEmAndamento = document.querySelector(".em_andamento")
+const listaTarefasConcluida = document.querySelector(".concluidas")
+
+const modalBootstrap = new bootstrap.Modal(document.getElementById('modalAviso'));
+const modalConfirmandoBootstrap = new bootstrap.Modal(document.getElementById('modalConfirmar'));
+
+let tarefaAlterar = null;
+let funcaoAlterar = null;
 let tarefas = JSON.parse(localStorage.getItem('tarefas')) || []
+
+function atualizarTarefas(){
+
+    localStorage.setItem('tarefas', JSON.stringify(tarefas));
+
+}
 
 function aparecerCadastro(){
 
@@ -16,12 +25,6 @@ function aparecerCadastro(){
 
     divForm.classList.toggle('hidden')
     verificar.contains('hidden') ? botaoTarefa.textContent = 'Adicionar Tarefa' : botaoTarefa.textContent= 'Cancelar'
-
-}
-
-function atualizarTarefas(){
-
-    localStorage.setItem('tarefas', JSON.stringify(tarefas));
 
 }
 
@@ -43,13 +46,16 @@ function criarCardTarefa(tarefa) {
   const botoesDiv = document.createElement('div');
   botoesDiv.classList.add('lista_tarefas_item_botoes');
 
-  const btnConcluir = document.createElement('button');
-  btnConcluir.classList.add('lista_tarefas_item_botao', 'concluir');
-  const imgCheck = document.createElement('img');
-  imgCheck.classList.add('lista_tarefas_item_imagem');
-  imgCheck.src = '/src/teste-check2.svg';
-  btnConcluir.appendChild(imgCheck);
-  botoesDiv.appendChild(btnConcluir);
+  if(tarefa.status_tarefa !== 2){
+    const btnConcluir = document.createElement('button');
+    btnConcluir.classList.add('lista_tarefas_item_botao', 'concluir');
+    const imgCheck = document.createElement('img');
+    imgCheck.classList.add('lista_tarefas_item_imagem');
+    imgCheck.src = '/src/teste-check2.svg';
+    btnConcluir.addEventListener('click', () => abrirModalAviso(tarefa , 'concluir'));
+    btnConcluir.appendChild(imgCheck);
+    botoesDiv.appendChild(btnConcluir);
+  }
 
   const btnExcluir = document.createElement('button');
   btnExcluir.classList.add('lista_tarefas_item_botao', 'excluir');
@@ -58,7 +64,7 @@ function criarCardTarefa(tarefa) {
   imgTrash.src = '/src/teste_lixo.svg';
   btnExcluir.appendChild(imgTrash);
 
-  btnExcluir.addEventListener('click', () => abrirModalExclusao(tarefa));
+  btnExcluir.addEventListener('click', () => abrirModalAviso(tarefa , 'excluir'));
 
   botoesDiv.appendChild(btnExcluir);
 
@@ -78,55 +84,128 @@ function cadastrarTarefa(){
     }
     const tarefa = {
         nome: nomeTarefa,
-        id_tarefa: crypto.randomUUID()
+        id_tarefa: crypto.randomUUID(),
+        status_tarefa: 1
     }
-    // console.log(tarefa.id_tarefa)
+    // console.log(tarefa)
     tarefas.push(tarefa)
     atualizarTarefas()
     const tarefaNova = criarCardTarefa(tarefa) 
-    listaTarefas.append(tarefaNova)
+    tarefaNova.classList.add('fade-in')
+    listaTarefasEmAndamento.append(tarefaNova)
     textareaTarefa.value = "";
     aparecerCadastro()
 
 }
 
-function atualizarTela(){
-
-    tarefas.forEach((tarefa) => {
-        const cardTarefa = criarCardTarefa(tarefa);
-        listaTarefas.append(cardTarefa)
-    });
-
-}
-
-function abrirModalExclusao(tarefa){
-
-    document.getElementById('modalTitulo').textContent = `Você deseja excluir a tarefa ${tarefa.nome}?`;
-    tarefaExcluir = tarefa;
-    modalBootstrap.show();
-}
-
-function fecharModal(verificacao){
-    // console.log('entrou')
-    // console.log(verificacao)
-    verificacao === 1 ? modalBootstrap.hide() : modalConfirmandoBootstrap.hide()
-}
-
 function excluirTarefa(){
 
-    if(!tarefaExcluir)
+    if(!tarefaAlterar)
         return;
 
-    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaExcluir.id_tarefa);
-    // alert(`Tarefa excluída com sucesso`);
+    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaAlterar.id_tarefa);
     tarefas.splice(indice , 1)
     atualizarTarefas()
 
-    const divExcluir = document.querySelector(`[data-id="${tarefaExcluir.id_tarefa}"]`);
-    divExcluir.remove();
+    const divExcluir = document.querySelector(`[data-id="${tarefaAlterar.id_tarefa}"]`);
+    divExcluir.classList.add('fade-out')
+    divExcluir.addEventListener('animationend', () => {
+        divExcluir.remove();
+    });
     modalBootstrap.hide();
-    modalConfirmandoBootstrap.show()
+    abrirModalConfirmacao(tarefaAlterar.nome , 'excluir')
+}
 
+function concluirTarefa(){
+
+    if (!tarefaAlterar)
+        return;
+
+    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaAlterar.id_tarefa);
+    tarefas[indice].status_tarefa = 2;  
+    atualizarTarefas();
+
+    const divConcluir = document.querySelector(`[data-id="${tarefaAlterar.id_tarefa}"]`);
+    divConcluir.classList.add('fade-out');
+    divConcluir.addEventListener('animationend', () => {
+        divConcluir.remove();
+
+        const novoCard = criarCardTarefa(tarefas[indice]);
+        novoCard.classList.add('fade-in');
+        novoCard.classList.add('concluida');
+        listaTarefasConcluida.append(novoCard);
+    });
+
+    modalBootstrap.hide();
+
+    abrirModalConfirmacao(tarefaAlterar.nome, 'concluir');
+
+}
+
+function alterarTarefa(){
+
+    funcaoAlterar === 'excluir' ? excluirTarefa() : concluirTarefa()
+
+}
+
+function abrirModalAviso(tarefa , origem){
+
+    if(origem === 'excluir'){
+        document.getElementById('modalTituloAviso').textContent = `Você deseja excluir a tarefa '${tarefa.nome}'?`;
+        tarefaAlterar = tarefa;
+        funcaoAlterar = 'excluir'
+        modalBootstrap.show();
+    }
+
+    if(origem === 'concluir'){
+        document.getElementById('modalTituloAviso').textContent = `Você deseja concluir a tarefa '${tarefa.nome}'?`;
+        tarefaAlterar = tarefa;
+        funcaoAlterar = 'concluir'
+        modalBootstrap.show();
+    }
+
+}
+
+function abrirModalConfirmacao( nomeTarefa , origem){
+    if(origem === 'excluir'){
+        document.getElementById('modalTituloConfirmar').textContent = `Tarefa '${nomeTarefa}' excluída com sucesso!`;
+        modalConfirmandoBootstrap.show();
+    }
+    if(origem === 'concluir'){
+        document.getElementById('modalTituloConfirmar').textContent = `Tarefa '${nomeTarefa}' concluída com sucesso!`;
+        modalConfirmandoBootstrap.show();
+    }
+
+    tarefaAlterar = null
+    funcaoAlterar = null
+}
+
+function fecharModal(verificacao){
+    verificacao === 1 ? modalBootstrap.hide() : modalConfirmandoBootstrap.hide()
+}
+
+function atualizarTela(){
+
+    carregarTarefasAndamento()
+    carregarTarefasConcluidas()
+}
+
+function carregarTarefasAndamento(){
+     tarefas.forEach((tarefa) => {
+        if(tarefa.status_tarefa === 1){
+            const cardTarefa = criarCardTarefa(tarefa);
+            listaTarefasEmAndamento.append(cardTarefa)
+        }
+    });
+}
+
+function carregarTarefasConcluidas(){
+     tarefas.forEach((tarefa) => {
+        if(tarefa.status_tarefa === 2){
+            const cardTarefa = criarCardTarefa(tarefa);
+            listaTarefasConcluida.append(cardTarefa)
+        }
+    });
 }
 
 atualizarTela()
