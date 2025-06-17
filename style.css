@@ -151,12 +151,12 @@ body{
     display: flex;
     flex-direction: row;
     align-items: center;
-    /* gap: 2rem; */
+    /* gap: 30rem; */
     justify-content: space-between;
     background-color: var(--fundo-botao-tarefas);
-    padding: 1.4rem;
+    padding: 1rem;
     border-radius: 3px;
-    height: 3rem;
+    min-height: 3rem;
     cursor: grab;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 1);
 }
@@ -170,6 +170,9 @@ body{
     text-transform: uppercase; 
     letter-spacing: 0.1rem;
     margin-bottom: 0;
+    word-break: break-word;
+    /* overflow-wrap: break-word; */
+    white-space: normal;  /* Allows text wrapping */
 }
 .lista_tarefas_item_botoes{
     display: flex;
@@ -191,44 +194,12 @@ body{
 
 /* MODAL */
 
-.modal{
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    background-color: rgba(0, 0, 0, 0.416);
-    width: 100vw;
-    height: 100vh;
+.modal-content {
+    max-height: 80vh;
 }
 
-.modal_conteudo{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    /* gap: 30px; */
-    padding: 2rem;
-    background-color: white;
-    border-radius: 5px;
-    width: 350px;
-    height: 200px;
-}
-
-.modal_conteudo_titulo{
-    text-align: center;
-    font-family: "Raleway", sans-serif;
-    font-style: normal;
-    font-weight: 500;
-}
-
-.modal_botoes{
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
+.modal-body {
+    word-wrap: break-word;
 }
 
 .modal_botoes_botao{
@@ -268,11 +239,18 @@ body{
     background: #313131;
 }
 
-
 .modal_botoes_botao_imagem{
     width: 1.5rem;
     height: 1.5rem;
     object-fit: contain;
+}
+
+.modal_titulo_editar{
+    text-transform: uppercase();
+}
+
+.status_tarefa{
+    text-transform: uppercase;
 }
 
 /* ANIMAÇÕES CSS */

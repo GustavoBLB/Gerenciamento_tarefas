@@ -8,6 +8,7 @@ const listaTarefasConcluida = document.querySelector(".concluidas")
 
 const modalBootstrap = new bootstrap.Modal(document.getElementById('modalAviso'));
 const modalConfirmandoBootstrap = new bootstrap.Modal(document.getElementById('modalConfirmar'));
+const modalEditandoBootstrap = new bootstrap.Modal(document.getElementById('modalEditarTarefa'));
 
 let tarefaAlterar = null;
 let funcaoAlterar = null;
@@ -29,48 +30,59 @@ function aparecerCadastro(){
 }
 
 function criarCardTarefa(tarefa) {
-  const div = document.createElement('div');
-  div.classList.add('lista_tarefas_item');
-  div.dataset.id = tarefa.id_tarefa;
 
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.classList.add('lista_tarefas_item_checkbox');
-  div.appendChild(checkbox);
+    const div = document.createElement('div');
+    div.classList.add('lista_tarefas_item');
+    div.dataset.id = tarefa.id_tarefa;
 
-  const h1 = document.createElement('h1');
-  h1.classList.add('lista_tarefas_item_texto');
-  h1.textContent = tarefa.nome;
-  div.appendChild(h1);
+    //   const checkbox = document.createElement('input');
+    //   checkbox.type = 'checkbox';
+    //   checkbox.classList.add('lista_tarefas_item_checkbox');
+    //   div.appendChild(checkbox);
 
-  const botoesDiv = document.createElement('div');
-  botoesDiv.classList.add('lista_tarefas_item_botoes');
+    const h1 = document.createElement('h1');
+    h1.classList.add('lista_tarefas_item_texto');
+    h1.textContent = tarefa.nome;
+    div.appendChild(h1);
 
-  if(tarefa.status_tarefa !== 2){
-    const btnConcluir = document.createElement('button');
-    btnConcluir.classList.add('lista_tarefas_item_botao', 'concluir');
-    const imgCheck = document.createElement('img');
-    imgCheck.classList.add('lista_tarefas_item_imagem');
-    imgCheck.src = '/src/teste-check2.svg';
-    btnConcluir.addEventListener('click', () => abrirModalAviso(tarefa , 'concluir'));
-    btnConcluir.appendChild(imgCheck);
-    botoesDiv.appendChild(btnConcluir);
-  }
+    const botoesDiv = document.createElement('div');
+    botoesDiv.classList.add('lista_tarefas_item_botoes');
 
-  const btnExcluir = document.createElement('button');
-  btnExcluir.classList.add('lista_tarefas_item_botao', 'excluir');
-  const imgTrash = document.createElement('img');
-  imgTrash.classList.add('lista_tarefas_item_imagem');
-  imgTrash.src = '/src/teste_lixo.svg';
-  btnExcluir.appendChild(imgTrash);
+    const btnEditar = document.createElement('button');
+    btnEditar.classList.add('lista_tarefas_item_botao', 'excluir');
+    const imgEditar = document.createElement('img');
+    imgEditar.classList.add('lista_tarefas_item_imagem');
+    imgEditar.src = '/src/TAREFA_EDITAR.svg';
+    btnEditar.appendChild(imgEditar);
+    botoesDiv.appendChild(btnEditar);
 
-  btnExcluir.addEventListener('click', () => abrirModalAviso(tarefa , 'excluir'));
+    btnEditar.addEventListener('click', () => abrirModalRecadastro());
 
-  botoesDiv.appendChild(btnExcluir);
+    if(tarefa.status_tarefa !== 2){
+        const btnConcluir = document.createElement('button');
+        btnConcluir.classList.add('lista_tarefas_item_botao', 'concluir');
+        const imgCheck = document.createElement('img');
+        imgCheck.classList.add('lista_tarefas_item_imagem');
+        imgCheck.src = '/src/teste-check2.svg';
+        btnConcluir.addEventListener('click', () => abrirModalAviso(tarefa , 'concluir'));
+        btnConcluir.appendChild(imgCheck);
+        botoesDiv.appendChild(btnConcluir);
+    }
 
-  div.appendChild(botoesDiv);
+    const btnExcluir = document.createElement('button');
+    btnExcluir.classList.add('lista_tarefas_item_botao', 'excluir');
+    const imgTrash = document.createElement('img');
+    imgTrash.classList.add('lista_tarefas_item_imagem');
+    imgTrash.src = '/src/teste_lixo.svg';
+    btnExcluir.appendChild(imgTrash);
 
-  return div;
+    btnExcluir.addEventListener('click', () => abrirModalAviso(tarefa , 'excluir'));
+
+    botoesDiv.appendChild(btnExcluir);
+
+    div.appendChild(botoesDiv);
+
+    return div;
 }
 
 
@@ -148,17 +160,21 @@ function alterarTarefa(){
 
 }
 
+function abrirModalRecadastro(){
+    modalEditandoBootstrap.show()
+}
+
 function abrirModalAviso(tarefa , origem){
 
     if(origem === 'excluir'){
-        document.getElementById('modalTituloAviso').textContent = `Você deseja excluir a tarefa '${tarefa.nome}'?`;
+        document.getElementById('modalTituloAviso').innerHTML  = `Você deseja <strong>excluir</strong> a tarefa '${tarefa.nome}'?`;
         tarefaAlterar = tarefa;
         funcaoAlterar = 'excluir'
         modalBootstrap.show();
     }
 
     if(origem === 'concluir'){
-        document.getElementById('modalTituloAviso').textContent = `Você deseja concluir a tarefa '${tarefa.nome}'?`;
+        document.getElementById('modalTituloAviso').innerHTML  = `Você deseja <strong>concluir</strong> a tarefa '${tarefa.nome}'?`;
         tarefaAlterar = tarefa;
         funcaoAlterar = 'concluir'
         modalBootstrap.show();
