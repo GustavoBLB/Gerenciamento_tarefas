@@ -40,6 +40,10 @@ function criarCardTarefa(tarefa) {
     //   checkbox.classList.add('lista_tarefas_item_checkbox');
     //   div.appendChild(checkbox);
 
+     if (tarefa.status_tarefa === 2) {
+        div.classList.add('concluida');
+    }
+
     const h1 = document.createElement('h1');
     h1.classList.add('lista_tarefas_item_texto');
     h1.textContent = tarefa.nome;
@@ -56,7 +60,7 @@ function criarCardTarefa(tarefa) {
     btnEditar.appendChild(imgEditar);
     botoesDiv.appendChild(btnEditar);
 
-    btnEditar.addEventListener('click', () => abrirModalRecadastro());
+    btnEditar.addEventListener('click', () => abrirModalRecadastro(tarefa));
 
     if(tarefa.status_tarefa !== 2){
         const btnConcluir = document.createElement('button');
@@ -199,6 +203,52 @@ function abrirModalConfirmacao( nomeTarefa , origem){
 function fecharModal(verificacao){
     verificacao === 1 ? modalBootstrap.hide() : modalConfirmandoBootstrap.hide()
 }
+
+function fecharModalEdicao(){
+    modalEditandoBootstrap.hide();
+    tarefaAlterar = null;
+}
+
+function salvarEdicaoTarefa() {
+    if (!tarefaAlterar) return;
+
+    const novoNome = document.getElementById('descricaoTarefa').value;
+    const novoStatus = document.getElementById('status_tarefa').value;
+
+    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaAlterar.id_tarefa);
+
+    const statusAntes = tarefas[indice].status_tarefa;
+    const statusDepois = (novoStatus === 'em-andamento') ? 1 : 2;
+
+    // if(statusAntes === statusDepois)
+
+    tarefas[indice].nome = novoNome;
+    tarefas[indice].status_tarefa = statusDepois;
+
+    atualizarTarefas()
+    modalEditandoBootstrap.hide();
+    tarefaAlterar = null;
+}
+
+
+
+function abrirModalRecadastro(tarefa) {
+    document.getElementById('descricaoTarefa').value = tarefa.nome;
+
+    const selectStatus = document.getElementById('status_tarefa');
+    if (tarefa.status_tarefa === 1) {
+        selectStatus.value = 'em-andamento';
+    } else if (tarefa.status_tarefa === 2) {
+        selectStatus.value = 'concluida';
+    }
+
+    // Guarda a tarefa que está sendo editada
+    tarefaAlterar = tarefa;
+
+    modalEditandoBootstrap.show();
+}
+
+
 
 function atualizarTela(){
 
