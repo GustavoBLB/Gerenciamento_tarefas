@@ -136,12 +136,20 @@ function concluirTarefa(){
 
     if (!tarefaAlterar)
         return;
-
-    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaAlterar.id_tarefa);
-    tarefas[indice].status_tarefa = 2;  
+    alterarTarefaConcluir(tarefaAlterar.id_tarefa);
     atualizarTarefas();
 
-    const divConcluir = document.querySelector(`[data-id="${tarefaAlterar.id_tarefa}"]`);
+
+    modalBootstrap.hide();
+
+    abrirModalConfirmacao(tarefaAlterar.nome, 'concluir');
+
+}
+
+function alterarTarefaConcluir(id_alterar){
+    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === id_alterar);
+    tarefas[indice].status_tarefa = 2;  
+    const divConcluir = document.querySelector(`[data-id="${id_alterar}"]`);
     divConcluir.classList.add('fade-out');
     divConcluir.addEventListener('animationend', () => {
         divConcluir.remove();
@@ -151,11 +159,21 @@ function concluirTarefa(){
         novoCard.classList.add('concluida');
         listaTarefasConcluida.append(novoCard);
     });
+}
 
-    modalBootstrap.hide();
+function alterarTarefaEmAndamento(id_alterar){
+    const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === id_alterar);
+    tarefas[indice].status_tarefa = 1;  
+    const divConcluir = document.querySelector(`[data-id="${id_alterar}"]`);
+    divConcluir.classList.add('fade-out');
+    divConcluir.addEventListener('animationend', () => {
+        divConcluir.remove();
 
-    abrirModalConfirmacao(tarefaAlterar.nome, 'concluir');
-
+        const novoCard = criarCardTarefa(tarefas[indice]);
+        novoCard.classList.add('fade-in');
+        // novoCard.classList.add('concluida');
+        listaTarefasEmAndamento.append(novoCard);
+    });
 }
 
 function alterarTarefa(){
@@ -195,6 +213,10 @@ function abrirModalConfirmacao( nomeTarefa , origem){
         document.getElementById('modalTituloConfirmar').textContent = `Tarefa '${nomeTarefa}' concluída com sucesso!`;
         modalConfirmandoBootstrap.show();
     }
+    if(origem === 'edicao'){
+        document.getElementById('modalTituloConfirmar').textContent = `Tarefa '${nomeTarefa}' editada com sucesso!`;
+        modalConfirmandoBootstrap.show();
+    }
 
     tarefaAlterar = null
     funcaoAlterar = null
@@ -218,13 +240,34 @@ function salvarEdicaoTarefa() {
     const indice = tarefas.findIndex(tarefa => tarefa.id_tarefa === tarefaAlterar.id_tarefa);
 
     const statusAntes = tarefas[indice].status_tarefa;
-    const statusDepois = (novoStatus === 'em-andamento') ? 1 : 2;
+    const nomeAntes = tarefas[indice].nome 
 
-    // if(statusAntes === statusDepois)
+    const statusDepois = (novoStatus === 'em-andamento') ? 1 : 2;
 
     tarefas[indice].nome = novoNome;
     tarefas[indice].status_tarefa = statusDepois;
 
+    let editou = 0
+
+    try{
+        if(statusAntes !== statusDepois && statusDepois === 2){
+            alterarTarefaConcluir(tarefaAlterar.id_tarefa)
+            editou = 1
+        }
+        else if(statusAntes !== statusDepois && statusDepois === 1){
+            alterarTarefaEmAndamento(tarefaAlterar.id_tarefa)
+            editou = 1
+        }
+        else if(statusAntes === statusDepois && nomeAntes !== novoNome){
+            const card = document.querySelector(`[data-id="${tarefaAlterar.id_tarefa}"]`);
+            const h1 = card.querySelector('.lista_tarefas_item_texto');
+            h1.textContent = novoNome;
+            editou = 1
+        }
+    }
+    finally{
+        editou === 1 ? abrirModalConfirmacao( nomeAntes , 'edicao' ) : null
+    }
     atualizarTarefas()
     modalEditandoBootstrap.hide();
     tarefaAlterar = null;
