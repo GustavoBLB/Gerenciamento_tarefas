@@ -13,6 +13,7 @@ const modalEditandoBootstrap = new bootstrap.Modal(document.getElementById('moda
 let tarefaAlterar = null;
 let funcaoAlterar = null;
 let tarefaSendoArrastada = null;
+let filtroAtual = null;
 let tarefas = JSON.parse(localStorage.getItem('tarefas')) || []
 
 function atualizarTarefas(){
@@ -123,7 +124,13 @@ function soltarTarefa(evento, elementoAlvo) {
     tarefas.splice(indexAlvo, 0, tarefaMovida);
 
     atualizarTarefas();
-    filtroTarefasTodas();
+    if (filtroAtual === 'andamento') 
+        filtroTarefasAndamento();
+    else if (filtroAtual === 'concluida') 
+        filtroTarefasConcluidas();
+    else
+        filtroTarefasTodas()
+
 }
 
 
@@ -354,6 +361,7 @@ function limparListas() {
 function filtroTarefasTodas() {
     limparListas();
     atualizarHrs('todas')
+    filtroAtual = 'todas'
     tarefas.forEach((tarefa) => {
         const cardTarefa = criarCardTarefa(tarefa);
         cardTarefa.classList.add('fade-in');
@@ -369,7 +377,7 @@ function filtroTarefasTodas() {
 
 function filtroTarefasConcluidas() {
     limparListas();
-
+    filtroAtual = 'concluida'
     atualizarHrs('concluidas')
     tarefas.forEach((tarefa) => {
         if(tarefa.status_tarefa === 2){
@@ -383,6 +391,7 @@ function filtroTarefasConcluidas() {
 
 function filtroTarefasAndamento() {
     limparListas();
+    filtroAtual = 'andamento'
     atualizarHrs('andamento')
     tarefas.forEach((tarefa) => {
         if(tarefa.status_tarefa === 1){
