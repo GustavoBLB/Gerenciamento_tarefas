@@ -13,6 +13,8 @@
 </head>
 <body>
 
+    <!-- TITULO + BOTAO -->
+
         <header class="tarefa">
 
             <h1 class="tarefa_titulo">Lista de tarefas</h1>
@@ -37,17 +39,38 @@
 
         </header>
 
-        <div class="d-flex justify-content-center align-items-center my-4">
+    <!-- QUANTIDADE + FILTRO -->
+
+        <section class="container d-flex justify-content-evenly align-items-center my-3">
+            <div id="contadorTarefas" class="fw-bold">
+            </div>
+
+            <div class="dropdown">
+                <button class=" dropdown-btn  dropdown-toggle" type="button" id="dropdownFiltro" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filtros
+                </button>
+                <div class="dropdown-content">
+                    <a class="dropdown-content-item" onclick="filtroTarefasTodas()">Filtrar Todas Tarefas</a>
+                    <a class="dropdown-content-item" onclick="filtroTarefasConcluidas()">Tarefas Concluídas</a>
+                    <a class="dropdown-content-item" onclick="filtroTarefasAndamento()">Tarefas em Andamento</a>
+                </div>
+            </div>
+        </section>
+
+
+    <!-- TAREFAS -->
+
+        <div id="hrAndamento" class="d-flex justify-content-center align-items-center my-4">
             <div class="hr_linha"></div>
-                <span class="hr_texto mx-2">Em andamento</span>
+                <span class="hr_texto mx-2" >Em andamento</span>
             <div class="hr_linha"></div>
         </div>
 
         <section class="lista_tarefas em_andamento"></section>
 
-        <div class="d-flex justify-content-center align-items-center my-4">
+        <div id="hrConcluida" class="d-flex justify-content-center align-items-center my-4">
             <div class="hr_linha"></div>
-                <span class="hr_texto mx-2">Concluidas</span>
+                <span class="hr_texto mx-2" >Concluidas</span>
             <div class="hr_linha"></div>
         </div>
 

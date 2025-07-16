@@ -12,6 +12,7 @@ const modalEditandoBootstrap = new bootstrap.Modal(document.getElementById('moda
 
 let tarefaAlterar = null;
 let funcaoAlterar = null;
+let tarefaSendoArrastada = null;
 let tarefas = JSON.parse(localStorage.getItem('tarefas')) || []
 
 function atualizarTarefas(){
@@ -35,10 +36,6 @@ function criarCardTarefa(tarefa) {
     div.classList.add('lista_tarefas_item');
     div.dataset.id = tarefa.id_tarefa;
 
-    //   const checkbox = document.createElement('input');
-    //   checkbox.type = 'checkbox';
-    //   checkbox.classList.add('lista_tarefas_item_checkbox');
-    //   div.appendChild(checkbox);
 
      if (tarefa.status_tarefa === 2) {
         div.classList.add('concluida');
@@ -86,8 +83,50 @@ function criarCardTarefa(tarefa) {
 
     div.appendChild(botoesDiv);
 
+    div.setAttribute('draggable', true);
+    div.addEventListener('dragstart', (e) => iniciarDrag(e, tarefa.id_tarefa));
+    div.addEventListener('dragover', permitirDrop);
+    div.addEventListener('drop', (e) => soltarTarefa(e, div));
+
+
     return div;
 }
+
+function iniciarDrag(evento, idTarefa) {
+    tarefaSendoArrastada = idTarefa;
+    event.dataTransfer.effectAllowed = "move"
+}
+
+function permitirDrop(evento) {
+    evento.preventDefault();
+}
+
+function soltarTarefa(evento, elementoAlvo) {
+    evento.preventDefault();
+
+    const idAlvo = elementoAlvo.dataset.id;
+
+    if (tarefaSendoArrastada === idAlvo) 
+        return;
+
+    const indexArrastada = tarefas.findIndex(t => t.id_tarefa === tarefaSendoArrastada);
+    const indexAlvo = tarefas.findIndex(t => t.id_tarefa === idAlvo);
+
+    const tarefaArrastada = tarefas[indexArrastada];
+    const tarefaAlvo = tarefas[indexAlvo];
+
+    if (tarefaArrastada.status_tarefa !== tarefaAlvo.status_tarefa) {
+        return;
+    }
+
+    const tarefaMovida = tarefas.splice(indexArrastada, 1)[0];
+    tarefas.splice(indexAlvo, 0, tarefaMovida);
+
+    atualizarTarefas();
+    filtroTarefasTodas();
+}
+
+
 
 
 function cadastrarTarefa(){
@@ -111,6 +150,7 @@ function cadastrarTarefa(){
     listaTarefasEmAndamento.append(tarefaNova)
     textareaTarefa.value = "";
     aparecerCadastro()
+    filtroTarefasTodas()
 
 }
 
@@ -143,6 +183,7 @@ function concluirTarefa(){
     modalBootstrap.hide();
 
     abrirModalConfirmacao(tarefaAlterar.nome, 'concluir');
+    filtroTarefasTodas()
 
 }
 
@@ -271,6 +312,7 @@ function salvarEdicaoTarefa() {
     atualizarTarefas()
     modalEditandoBootstrap.hide();
     tarefaAlterar = null;
+    filtroTarefasTodas()
 }
 
 
@@ -292,13 +334,6 @@ function abrirModalRecadastro(tarefa) {
 }
 
 
-
-function atualizarTela(){
-
-    carregarTarefasAndamento()
-    carregarTarefasConcluidas()
-}
-
 function carregarTarefasAndamento(){
      tarefas.forEach((tarefa) => {
         if(tarefa.status_tarefa === 1){
@@ -308,13 +343,98 @@ function carregarTarefasAndamento(){
     });
 }
 
-function carregarTarefasConcluidas(){
-     tarefas.forEach((tarefa) => {
-        if(tarefa.status_tarefa === 2){
-            const cardTarefa = criarCardTarefa(tarefa);
-            listaTarefasConcluida.append(cardTarefa)
-        }
-    });
+
+// funcções filtros 
+
+function limparListas() {
+    listaTarefasEmAndamento.innerHTML = '';
+    listaTarefasConcluida.innerHTML = '';
 }
 
-atualizarTela()
+function filtroTarefasTodas() {
+    limparListas();
+    atualizarHrs('todas')
+    tarefas.forEach((tarefa) => {
+        const cardTarefa = criarCardTarefa(tarefa);
+        cardTarefa.classList.add('fade-in');
+
+        if(tarefa.status_tarefa === 1){
+            listaTarefasEmAndamento.append(cardTarefa);
+        } else if(tarefa.status_tarefa === 2){
+            listaTarefasConcluida.append(cardTarefa);
+        }
+    });
+    atualizarContador('todas')
+}
+
+function filtroTarefasConcluidas() {
+    limparListas();
+
+    atualizarHrs('concluidas')
+    tarefas.forEach((tarefa) => {
+        if(tarefa.status_tarefa === 2){
+            const cardTarefa = criarCardTarefa(tarefa);
+            cardTarefa.classList.add('fade-in');
+            listaTarefasConcluida.append(cardTarefa);
+        }
+    });
+    atualizarContador('concluida')
+}
+
+function filtroTarefasAndamento() {
+    limparListas();
+    atualizarHrs('andamento')
+    tarefas.forEach((tarefa) => {
+        if(tarefa.status_tarefa === 1){
+            const cardTarefa = criarCardTarefa(tarefa);
+            cardTarefa.classList.add('fade-in');
+            listaTarefasEmAndamento.append(cardTarefa);
+        }
+    });
+    atualizarContador('andamento')
+}
+
+function atualizarHrs(filtro) {
+    const hrAndamento = document.getElementById('hrAndamento');
+    const hrConcluida = document.getElementById('hrConcluida');
+
+    if (filtro === 'todas') {
+        mostrar(hrAndamento);
+        mostrar(hrConcluida);
+    } else if (filtro === 'andamento') {
+        mostrar(hrAndamento);
+        esconder(hrConcluida);
+    } else if (filtro === 'concluidas') {
+        mostrar(hrConcluida);
+        esconder(hrAndamento);
+    }
+}
+
+
+function mostrar(elemento) {
+    elemento.classList.remove('d-none');
+    elemento.classList.add('d-flex');
+}
+
+function esconder(elemento) {
+    elemento.classList.remove('d-flex');
+    elemento.classList.add('d-none');
+}
+
+function atualizarContador(filtro) {
+    const contador = document.getElementById('contadorTarefas');
+
+    if (filtro === 'todas') {
+        const total = tarefas.length;
+        contador.textContent = `Tarefas: ${total}`;
+    } else if (filtro === 'andamento') {
+        const andamento = tarefas.filter(tarefa => tarefa.status_tarefa === 1).length;
+        contador.textContent = `Tarefas em andamento: ${andamento}`;
+    } else if (filtro === 'concluida') {
+        const concluidas = tarefas.filter(tarefa => tarefa.status_tarefa === 2).length;
+        contador.textContent = `Tarefas concluídas: ${concluidas}`;
+    }
+}
+
+
+filtroTarefasTodas()
